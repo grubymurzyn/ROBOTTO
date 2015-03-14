@@ -1,14 +1,21 @@
 
 #include "Game.h"
-Duck Game::_duck;
+Robotto Game::_robotto;
+Time Game::TimeFromUpdate;
+Clock Game::clock;
+const  Time StepTime = sf::seconds(1.f / 500.f);
+vector <Ground> V;
 void Game::Start(void)
 {
 	if (_gameState != Uninitialized)
 		return;
 
-	_mainWindow.create(sf::VideoMode(1024, 500, 32), "Pang!");
-	_duck.Load("images/duck2.png");
-	_duck.SetPosition((1024 / 2) - 45, 200);
+	_mainWindow.create(sf::VideoMode(1024, 512, 32), "Pang!");
+	TimeFromUpdate = Time::Zero;
+	
+	_robotto.Load("images/duck2.png");
+	_robotto.SetPosition(Vector2f((1024 / 2) - 45, 100));
+
 
 	_gameState = Game::ShowingSplash;
 
@@ -46,31 +53,32 @@ void Game::GameLoop()
 		}
 		case Game::Playing:
 		{	
-			_mainWindow.clear(sf::Color(sf::Color(0, 0, 0)));
-			_duck.Draw(_mainWindow);
+			Time time = clock.restart();
+			TimeFromUpdate += time;
+			_robotto.Update();
+
+			while (TimeFromUpdate > StepTime)
+			{
+				TimeFromUpdate -= StepTime;
+				sf::Event zdarzenie;
+				while (_mainWindow.pollEvent(zdarzenie))
+				{
+					if (zdarzenie.type == sf::Event::Closed)
+						_mainWindow.close();
+
+				}
+				Collision::isColiding(_robotto, V , _robotto.Move(StepTime));
+			}
+
+			_mainWindow.clear();
+			_robotto.Draw(_mainWindow);
+			
+			for (int i = 0; i < V.size(); i++)
+				V[i].Draw(_mainWindow);
 			_mainWindow.display();
 
-			if (Keyboard::isKeyPressed(Keyboard::Space))
-			{
-
-				_duck.Jump();
-				
-
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Left))
-			{
-				_duck.Move(-5, 0);
-
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Right))
-			{
-				_duck.Move(5, 0);
-
-			}
-			if (currentEvent.type == sf::Event::Closed)
-			{
-				_gameState = Game::Exiting;
-			}
+			
+	
 			break;
 		}
 		}
@@ -96,7 +104,6 @@ void Game::ShowMenu()
 			break;
 	}
 }
-
 
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;

@@ -28,15 +28,20 @@ void VisibleGameObject::Draw(sf::RenderWindow & renderWindow)
 	}
 }
 
-void VisibleGameObject::SetPosition(float x, float y)
+void VisibleGameObject::SetPosition(Vector2f position)
 {
 	if (_isLoaded)
 	{
-		_sprite.setPosition(x, y);
+		_sprite.setPosition(position);
 	}
 }
-void VisibleGameObject::Move(float x, float y){
+void VisibleGameObject::Move(Vector2f v){
 	if (_isLoaded){
-		_sprite.move(x, y);
+		_sprite.move(v);
+	}
+}
+FloatRect VisibleGameObject::toColide(){
+	if (_isLoaded){
+		return _sprite.getGlobalBounds();
 	}
 }

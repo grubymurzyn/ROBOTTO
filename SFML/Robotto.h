@@ -1,9 +1,11 @@
 #include"VisibleGameObject.h"
 
 class Robotto :public VisibleGameObject{
-	
-	float speed = 10.f;
+	float speed = 100.f;
+	bool goUP, goDOWN, goLEFT, goRIGHT;
 public:
-	void Load(string name);
-	void Draw(RenderWindow& renderwindow);
+	Robotto();
+	~Robotto();
+	void Update();
+	Vector2f Move(Time time);
 };

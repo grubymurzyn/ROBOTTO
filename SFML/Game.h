@@ -4,7 +4,10 @@
 #include <list>
 #include"MainMenu.h"
 #include"SplashScreen.h"
-#include"Duck.h"
+#include"Collision.h"
+
+
+
 
 using namespace std;
 using namespace sf;
@@ -27,6 +30,7 @@ private:
 
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
-	static Duck _duck;
-
+	static Robotto _robotto;
+	static Clock clock;
+	static Time TimeFromUpdate;
 };
