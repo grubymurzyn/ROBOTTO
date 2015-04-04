@@ -1,10 +1,7 @@
 #include "Game.h"
 
-int main()
-{
-		Game game;
-		game.Start();
-
-
+int main(){
+	Game game;
+	game.runGame();
 	return 0;
 }

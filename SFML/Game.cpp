@@ -1,109 +1,103 @@
-
 #include "Game.h"
-Robotto Game::_robotto;
-Time Game::TimeFromUpdate;
-Clock Game::clock;
-const  Time StepTime = sf::seconds(1.f / 500.f);
-vector <Ground> V;
-void Game::Start(void)
+#include "Engine.h"
+
+Game::Game(void)
 {
-	if (_gameState != Uninitialized)
+	state = END;
+
+	if (!font.loadFromFile("data/Digital_tech.otf"))
+	{
+		
 		return;
-
-	_mainWindow.create(sf::VideoMode(1024, 512, 32), "Pang!");
-	TimeFromUpdate = Time::Zero;
-	
-	_robotto.Load("images/duck2.png");
-	_robotto.SetPosition(Vector2f((1024 / 2) - 45, 100));
-
-
-	_gameState = Game::ShowingSplash;
-
-	while (!IsExiting())
-	{
-		GameLoop();
 	}
-
-	_mainWindow.close();
+	window.create(VideoMode(1024,512,32),"Robotto");
+	state = MENU;
 }
 
-bool Game::IsExiting()
-{
-	if (_gameState == Game::Exiting)
-		return true;
-	else
-		return false;
-}
 
-void Game::GameLoop()
+Game::~Game()
 {
-	sf::Event currentEvent;
-	while (_mainWindow.pollEvent(currentEvent))
+}
+void Game::runGame()
+{
+	while (state != END)
 	{
-
-		switch (_gameState)
+		switch (state)
 		{
-		case Game::ShowingMenu:{
-			ShowMenu();
+		case GameState::MENU:
+			menu();
 			break;
-		}
-		case Game::ShowingSplash:{
-			ShowSplashScreen();
+		case GameState::GAME:
+			single();
 			break;
-		}
-		case Game::Playing:
-		{	
-			Time time = clock.restart();
-			TimeFromUpdate += time;
-			_robotto.Update();
-
-			while (TimeFromUpdate > StepTime)
-			{
-				TimeFromUpdate -= StepTime;
-				sf::Event zdarzenie;
-				while (_mainWindow.pollEvent(zdarzenie))
-				{
-					if (zdarzenie.type == sf::Event::Closed)
-						_mainWindow.close();
-
-				}
-				Collision::isColiding(_robotto, V , _robotto.Move(StepTime));
-			}
-
-			_mainWindow.clear();
-			_robotto.Draw(_mainWindow);
-			
-			for (int i = 0; i < V.size(); i++)
-				V[i].Draw(_mainWindow);
-			_mainWindow.display();
-
-			
-	
-			break;
-		}
 		}
 	}
 }
-void Game::ShowSplashScreen()
+void Game::menu()
 {
-	SplashScreen splashScreen;
-	splashScreen.Show(_mainWindow);
-	_gameState = Game::ShowingMenu;
-}
-void Game::ShowMenu()
-{
-	MainMenu mainMenu;
-	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
-	switch (result)
+	Text title("Robotto", font, 80);
+	title.setStyle(Text::Italic);
+
+	title.setPosition(1024 / 2 - title.getGlobalBounds().width / 2, 20);
+
+	const int ile = 2;
+
+	Text tekst[ile];
+
+	string str[] = { "Play", "Exit" };
+	for (int i = 0; i<ile; i++)
 	{
-		case MainMenu::Exit:
-			 _gameState = Game::Exiting;
-			 break;
-		case MainMenu::Play:
-			_gameState = Game::Playing;
-			break;
+		tekst[i].setFont(font);
+		tekst[i].setCharacterSize(65);
+
+		tekst[i].setString(str[i]);
+		tekst[i].setPosition(1024 / 2 - tekst[i].getGlobalBounds().width / 2, 250 + i * 120);
+	}
+
+	while (state == MENU)
+	{
+		Vector2f mouse(Mouse::getPosition(window));
+		Event event;
+
+		while (window.pollEvent(event))
+		{
+			//Wciœniêcie ESC lub przycisk X
+			if (event.type == Event::Closed || event.type == Event::KeyPressed &&
+				event.key.code == Keyboard::Escape)
+				state = END;
+
+			//klikniêcie PLAY
+			else if (tekst[0].getGlobalBounds().contains(mouse) &&
+				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
+			{
+				state = GAME;
+			}
+			//klikniêcie EXIT
+			else if (tekst[1].getGlobalBounds().contains(mouse) &&
+				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
+			{
+				state = END;
+			}
+		}
+		for (int i = 0; i<ile; i++)
+			if (tekst[i].getGlobalBounds().contains(mouse))
+				tekst[i].setColor(Color::Cyan);
+			else tekst[i].setColor(Color::White);
+
+			window.clear();
+
+			window.draw(title);
+			for (int i = 0; i<ile; i++)
+				window.draw(tekst[i]);
+
+			window.display();
 	}
 }
+void Game::single()
+{
+	Engine engine(window);
 
-Game::GameState Game::_gameState = Uninitialized;
-sf::RenderWindow Game::_mainWindow;
+	engine.runEngine(window);
+
+	state = MENU;
+}
