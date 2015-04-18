@@ -1,0 +1,4 @@
+﻿1>------ Build started: Project: SFML, Configuration: Debug Win32 ------
+1>  Engine.cpp
+1>LINK : fatal error LNK1168: cannot open C:\Projekty\SFML\Debug\SFML.exe for writing
+========== Build: 0 succeeded, 1 failed, 0 up-to-date, 0 skipped ==========
