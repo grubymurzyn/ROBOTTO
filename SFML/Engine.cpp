@@ -24,7 +24,6 @@ void Engine::runEngine(RenderWindow &window)
 	rect.setPosition(256,256);
 	rect.setFillColor(Color::Blue);
 	vector<RectangleShape> obstacle_list;
-	int kupa;
 
 	RectangleShape obstacle1(Vector2f(20, 20));
 	obstacle1.setPosition(300, 300);
