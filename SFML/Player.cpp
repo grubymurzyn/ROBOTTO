@@ -6,9 +6,10 @@ Player::Player(void)
 	loadFile("data/images/robotto.png");
 	setAnimFrame(IntRect(0, 0, 96, 96));
 	setPosition(Vector2f(1024/2,200));
-	setCenter(Vector2f(32, 32));
+	setCenter(Vector2f(48, 48));
 	status = WAIT;
 	isJumping = NO;
+
 }
 
 
@@ -16,9 +17,8 @@ Player::~Player()
 {
 }
 
-void Player::update(float delta,Clock anim_clock)//DO ZROBIENIA
+void Player::update(float delta)//DO ZROBIENIA
 {
-
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
 		velocity.x = moveSpeed;
 		status = RIGHT;
@@ -65,8 +65,8 @@ void Player::update(float delta,Clock anim_clock)//DO ZROBIENIA
 	
 	move(Vector2f(velocity.x*delta, velocity.y*delta)); 
 	
-	//cout << "KLATKA:" << frame << endl;
-	if (anim_clock.getElapsedTime() > sf::seconds(1.09f))
+	cout << "KLATKA:" << anim_clock.getElapsedTime().asSeconds()<< endl;
+	if (anim_clock.getElapsedTime() > sf::seconds(0.09f))
 	{
 		if (isJumping == NO && status != WAIT){
 			if (frame < 5)

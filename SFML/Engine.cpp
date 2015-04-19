@@ -13,18 +13,19 @@ void Engine::runEngine(RenderWindow &window)
 {
 	bool menu = false;
 	float t = 0;
-	Clock clock,anim_clock;
-	Player player;
-	Background background;
+	Clock clock;
+	Player player;	Background background;
+	Obstacle obstacle;
 	while (!menu)
 	{
 			float delta = clock.getElapsedTime().asSeconds() - t;
 			t = clock.getElapsedTime().asSeconds();
 
-			player.update(delta,anim_clock);
+			player.update(delta);
 
 			window.clear(Color(0,240,255));
 			background.draw(window);
+			window.draw(obstacle);
 			window.draw(player);
 			window.display();
 	}

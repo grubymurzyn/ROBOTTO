@@ -2,6 +2,7 @@
 #include"GameObject.h"
 
 
+
 class Player : public GameObject
 {
 public:
@@ -17,7 +18,7 @@ public:
 		YES,
 		NO
 	};
-	void update(float,Clock);
+	void update(float);
 	void stop();
 
 protected:
@@ -31,5 +32,6 @@ private:
 	float jumpSpeed = 7.0f;
 	float moveSpeed = 100.0f;
 	size_t frame=0;
+	Clock anim_clock;
 };
 

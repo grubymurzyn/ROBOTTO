@@ -1,6 +1,6 @@
 #pragma once
 #include "Player.h"
-#include"Background.h"
+#include"GameResources.h"
 
 class Engine
 {

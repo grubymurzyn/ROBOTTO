@@ -4,8 +4,8 @@
 Background::Background()
 {	
 
-	ground.setPosition(Vector2f(0, 367));
-	ground.setSize(Vector2f(1024, 155));
+	ground.setPosition(Vector2f(0, 352));
+	ground.setSize(Vector2f(1024, 212));
 	ground.setFillColor(Color::Red);
 }
 
