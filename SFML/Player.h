@@ -1,50 +1,35 @@
 #pragma once
+#include"GameObject.h"
 
-#include <SFML\Graphics.hpp>
-#include<SFML\Window.hpp>
-#include <vector>
-#define _USE_MATH_DEFINES
-#include <math.h>
 
-using namespace sf;
-using namespace std;
-
-class Player : public Drawable
+class Player : public GameObject
 {
 public:
 	Player(void);
 	~Player(void);
-
+	bool isFalling = false;
 	enum Status {
-		GO,
-		WAIT
+		RIGHT,
+		WAIT,
+		LEFT
 	};
-
-	Vector2f getPosition();
-	Status getStatus();
-
-	void update(Vector2f);
-
+	enum IsJumping {
+		YES,
+		NO
+	};
+	void update(float,Clock);
 	void stop();
-	void go(float);
-	Sprite sprite;
 
 protected:
 	int animate_frame;
 
 private:
-
-	Texture texture;
-
+	Vector2f velocity = Vector2f(0, 0);
 	Status status;
-	float jumpSpeed;
-	float moveSpeed;
-	size_t frame;
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		//rysowanie obiektow, które sk³adaj¹ siê na narysowanie naszej postaci
-		target.draw(sprite);
-	}
+	IsJumping isJumping;
+	//jumpSPEED == RANDOM
+	float jumpSpeed = 7.0f;
+	float moveSpeed = 100.0f;
+	size_t frame=0;
 };
 

@@ -1,24 +1,14 @@
-
+#include"GameResources.h"
 #include "Player.h"
 
 Player::Player(void)
 {
-	if (!texture.loadFromFile("data/images/player-move.png"))
-	{
-		return;
-	}
-
-	sprite.setTexture(texture);
-	sprite.setRotation(90);
-	sprite.setTextureRect(IntRect(0, 0, 64, 64));
-	sprite.setPosition(1024 / 2 , 250);
-	sprite.setOrigin(32, 32);
-
+	loadFile("data/images/robotto.png");
+	setAnimFrame(IntRect(0, 0, 96, 96));
+	setPosition(Vector2f(1024/2,200));
+	setCenter(Vector2f(32, 32));
 	status = WAIT;
-
-	frame = 0;
-	moveSpeed = 50.5;
-	jumpSpeed = 1.0f;
+	isJumping = NO;
 }
 
 
@@ -26,23 +16,93 @@ Player::~Player()
 {
 }
 
-void Player::update(Vector2f destination)//DO ZROBIENIA
+void Player::update(float delta,Clock anim_clock)//DO ZROBIENIA
 {
-	Vector2f norm = destination;
-	double rot = atan2(norm.y, norm.x);
-	rot = rot * 180.f / M_PI;
-	Clock anim_clock;
-	sprite.setRotation(rot);
 
-	if (anim_clock.getElapsedTime() > sf::seconds(0.09f))
+	if (Keyboard::isKeyPressed(Keyboard::Right)) {
+		velocity.x = moveSpeed;
+		status = RIGHT;
+		if (Keyboard::isKeyPressed(Keyboard::Space) && counter*delta < maxHeight*delta){
+			velocity.y -= jumpSpeed;
+			isJumping = YES;
+			++counter;
+		}
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+		velocity.x = -moveSpeed;
+		status = LEFT;
+		if (Keyboard::isKeyPressed(Keyboard::Space) && counter*delta < maxHeight*delta){
+			velocity.y -= jumpSpeed;
+			isJumping = YES;
+			++counter;
+		}
+	}
+	else if ((Keyboard::isKeyPressed(Keyboard::Space)) && counter*delta < maxHeight*delta){
+		velocity.y -= jumpSpeed;
+		isJumping = YES;
+		++counter;
+	}
+	else{
+		velocity.x = 0;
+		status = WAIT;
+	}
+
+	if ((getPosition().y + getSize().height < groundHeight || velocity.y < 0)){
+		isJumping = YES;
+		if (velocity.y == 0) isFalling = true;
+		velocity.y += gravity;
+		++counter;
+	}
+
+	else
+	{	
+		isFalling = false;
+		isJumping = NO;
+		counter = 0;
+		setPosition(Vector2f(getPosition().x, groundHeight - getSize().height));
+		velocity.y = 0;
+	}
+	
+	move(Vector2f(velocity.x*delta, velocity.y*delta)); 
+	
+	//cout << "KLATKA:" << frame << endl;
+	if (anim_clock.getElapsedTime() > sf::seconds(1.09f))
 	{
-		if (status == WAIT) return;
-		if (frame < 7 /*liczba klatek animacji*/)
+		if (isJumping == NO && status != WAIT){
+			if (frame < 5)
 			frame++;
-		else
-			frame = 0; //zapetlanie animacji
+			else frame = 0;
+		}
+		else if (isJumping == YES && status==WAIT){
+			if (isFalling)
+				frame = 1;
+			else frame = 0;
+		}
+		else if (isJumping == YES && status != WAIT){
+			if (isFalling)
+				frame = 2;
+			else frame = 1;
+		}
 
-		sprite.setTextureRect(IntRect(frame * 64, 0, 64, 64));
+
+		if (status == RIGHT && isJumping == NO){
+			setAnimFrame(IntRect(frame * 96, 0, 96, 96));
+		}
+		else if (status == LEFT && isJumping == NO){
+			setAnimFrame(IntRect(frame * 96, 96, 96, 96));
+		}
+		else if (status == WAIT && isJumping == NO){
+			setAnimFrame(IntRect(0, 192, 96, 96));
+		}
+		else if (status == WAIT && isJumping == YES){
+			setAnimFrame(IntRect(frame* 96, 288, 96, 96));
+		}
+		else if (status == RIGHT && isJumping == YES){
+			setAnimFrame(IntRect(frame * 96, 384, 96, 96));
+		}
+		else if (status == LEFT && isJumping == YES){
+			setAnimFrame(IntRect(frame * 96, 480, 96, 96));
+		}
 		//x, y, szerokosc, wysokosc
 		anim_clock.restart();
 	}
@@ -52,16 +112,6 @@ void Player::stop()
 {
 	status = WAIT;
 	frame = 0;
-}
-void Player::go(float delta)
-{
-	status = GO;
-
-	float rotacja = sprite.getRotation();
-	double vx = sin((rotacja * M_PI) / 180.0f);
-	double vy = -cos((rotacja * M_PI) / 180.0f);
-
-	sprite.move(moveSpeed*vx*delta, moveSpeed*vy*delta);
 }
 
 
