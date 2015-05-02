@@ -51,3 +51,7 @@ void GameObject::draw(RenderTarget &target,RenderStates states) const {
 void GameObject::move(Vector2f destination){
 	sprite.move(destination);
 }
+
+FloatRect GameObject::getGlobalBounds() {
+	return sprite.getGlobalBounds();
+}

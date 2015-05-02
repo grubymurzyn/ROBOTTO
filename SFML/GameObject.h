@@ -30,6 +30,7 @@ public:
 	virtual Vector2f getCenter();
 	virtual void draw(RenderTarget&,RenderStates) const;
 	virtual void move(Vector2f);
+	virtual FloatRect getGlobalBounds();
 
 };
 

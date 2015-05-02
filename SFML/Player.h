@@ -1,9 +1,8 @@
 #pragma once
-#include"GameObject.h"
+#include"Collision.h"
 
-class GameResources;
 
-class Player : public GameObject
+class Player : public Collision
 {
 public:
 	Player(void);
@@ -18,7 +17,7 @@ public:
 		YES,
 		NO
 	};
-	void update(float);
+	void update(float, vector<RectangleShape>);
 	void stop();
 
 protected:
@@ -29,6 +28,7 @@ private:
 	Status status;
 	IsJumping isJumping;
 	//jumpSPEED == RANDOM
+	float actualHeight = 400;
 	float jumpSpeed = 7.0f;
 	float moveSpeed = 100.0f;
 	size_t frame=0;

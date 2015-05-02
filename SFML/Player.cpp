@@ -10,6 +10,7 @@ Player::Player(void)
 	status = WAIT;
 	isJumping = NO;
 
+
 }
 
 
@@ -17,7 +18,7 @@ Player::~Player()
 {
 }
 
-void Player::update(float delta)//DO ZROBIENIA
+void Player::update(float delta, vector<RectangleShape> object_list)//DO ZROBIENIA
 {
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
 		velocity.x = moveSpeed;
@@ -46,8 +47,19 @@ void Player::update(float delta)//DO ZROBIENIA
 		velocity.x = 0;
 		status = WAIT;
 	}
+	
+	/*************************************
+	   SPRAWDZANIE KOLIZJI I JEJ OBS£UGA
+	*************************************/
+	if (checkIfCollisionTop(object_list))velocity.y = 0;
+	if (checkIfCollisionBottom(object_list)){
+		actualHeight = getGlobalBounds().top + getGlobalBounds().height;
+		isJumping = NO; //TO NIEDZIA£A
+	}
+	
 
-	if ((getPosition().y + getSize().height < groundHeight || velocity.y < 0)){
+
+	if ((getPosition().y + getSize().height < actualHeight || velocity.y < 0)){
 		isJumping = YES;
 		if (velocity.y == 0) isFalling = true;
 		velocity.y += gravity;
@@ -55,17 +67,18 @@ void Player::update(float delta)//DO ZROBIENIA
 	}
 
 	else
-	{	
+	{
 		isFalling = false;
 		isJumping = NO;
 		counter = 0;
 		setPosition(Vector2f(getPosition().x, groundHeight - getSize().height));
 		velocity.y = 0;
 	}
+
+	cout << checkIfCollisionBottom(object_list)<< endl;
+	move(Vector2f(velocity.x*delta, velocity.y*delta));
 	
-	move(Vector2f(velocity.x*delta, velocity.y*delta)); 
 	
-	cout << "KLATKA:" << anim_clock.getElapsedTime().asSeconds()<< endl;
 	if (anim_clock.getElapsedTime() > sf::seconds(0.09f))
 	{
 		if (isJumping == NO && status != WAIT){

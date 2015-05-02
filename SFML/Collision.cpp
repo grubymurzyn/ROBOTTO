@@ -10,17 +10,52 @@ Collision::~Collision()
 {
 }
 
-bool Collision::checkIfCollision(RectangleShape player, vector<RectangleShape> object_list){
+template <class T> T Collision::colidingObject(vector<T> object_list){
+	for each (T object in object_list)
+	{
+
+
+		if (getGlobalBounds().intersects(object.getGlobalBounds()))return object;
+
+
+	}
+}
+
+
+bool Collision::checkIfCollision(vector<RectangleShape> object_list){
 	
 
 	for each (RectangleShape object in object_list)
 	{	
 
 
-		if (player.getGlobalBounds().intersects(object.getGlobalBounds()))return true;
+		if (getGlobalBounds().intersects(object.getGlobalBounds()))return true;
 
 			
 	}
-	return 0;
+	return false;
 }
 
+bool Collision::checkIfCollisionTop(vector <RectangleShape> object_list){
+
+	if (checkIfCollision(object_list)){
+		RectangleShape object = colidingObject(object_list);
+		if (getPosition().y > object.getPosition().y) return true;
+		else return false;
+	}
+	else{
+		return false;
+	}
+}
+
+bool Collision::checkIfCollisionBottom(vector <RectangleShape> object_list){
+
+	if (checkIfCollision(object_list)){
+		RectangleShape object = colidingObject(object_list);
+		if (getPosition().y < object.getPosition().y) return true;
+		else return false;
+	}
+	else{
+		return false;
+	}
+}

@@ -1,13 +1,15 @@
 #pragma once
-
-#include"Player.h"
-
-class Collision
+#include "GameObject.h"
+class Collision :public GameObject
 {
+
 public:
 	Collision();
 	~Collision();
-	bool checkIfCollision(RectangleShape,vector<RectangleShape>);
+	template <typename T> T colidingObject(vector<T>);
+	virtual bool checkIfCollision(vector<RectangleShape>);
+	virtual bool checkIfCollisionBottom(vector<RectangleShape>);
+	virtual bool checkIfCollisionTop(vector<RectangleShape>);
 };
 
 
