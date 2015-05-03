@@ -31,6 +31,7 @@ private:
 	float actualHeight = 400;
 	float jumpSpeed = 7.0f;
 	float moveSpeed = 100.0f;
+	float tempVelocityY =0;
 	size_t frame=0;
 	Clock anim_clock;
 };

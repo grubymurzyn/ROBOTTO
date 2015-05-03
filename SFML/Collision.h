@@ -10,6 +10,9 @@ public:
 	virtual bool checkIfCollision(vector<RectangleShape>);
 	virtual bool checkIfCollisionBottom(vector<RectangleShape>);
 	virtual bool checkIfCollisionTop(vector<RectangleShape>);
+	virtual bool checkIfCollisionLeft(vector<RectangleShape>);
+	virtual bool checkIfCollisionRight(vector<RectangleShape>);
+	
 };
 
 

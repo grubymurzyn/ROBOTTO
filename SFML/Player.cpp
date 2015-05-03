@@ -51,31 +51,58 @@ void Player::update(float delta, vector<RectangleShape> object_list)//DO ZROBIEN
 	/*************************************
 	   SPRAWDZANIE KOLIZJI I JEJ OBS£UGA
 	*************************************/
-	if (checkIfCollisionTop(object_list))velocity.y = 0;
-	if (checkIfCollisionBottom(object_list)){
-		actualHeight = getGlobalBounds().top + getGlobalBounds().height;
-		isJumping = NO; //TO NIEDZIA£A
+	if (checkIfCollisionTop(object_list)){
+		velocity.y = 0;
+		cout << "TOP" << endl;
+		if (checkIfCollisionLeft(object_list)){
+			cout << "TOP && LEFT" << endl;
+			if (velocity.x > 0) {
+				velocity.x = 0;
+			}
+			if (isJumping == YES){
+				tempVelocityY += gravity;
+				velocity.y = tempVelocityY;
+				cout << "TOP && LEFT && IS JUMPING " << endl;
+			}
+		}
+		else if (checkIfCollisionRight(object_list)){
+			cout << "TOP && RIGHT" << endl;
+			if (velocity.x < 0) {
+				velocity.x = 0;
+			}
+			if (isJumping == YES){
+				tempVelocityY += gravity;
+				velocity.y = tempVelocityY;
+				cout << "TOP && LEFT && IS JUMPING " << endl;
+			}
+		}
 	}
 	
-
+	if (checkIfCollisionBottom(object_list)){
+		counter = 0;
+		actualHeight = getPosition().y + getSize().height;
+		cout << "BOTTOM" << endl;
+	}
+	else if (!checkIfCollisionBottom(object_list) && actualHeight != groundHeight){
+		actualHeight = groundHeight;
+	}
 
 	if ((getPosition().y + getSize().height < actualHeight || velocity.y < 0)){
 		isJumping = YES;
 		if (velocity.y == 0) isFalling = true;
 		velocity.y += gravity;
 		++counter;
-	}
-
+	} 
 	else
 	{
 		isFalling = false;
+		tempVelocityY = 0;
 		isJumping = NO;
 		counter = 0;
-		setPosition(Vector2f(getPosition().x, groundHeight - getSize().height));
+		setPosition(Vector2f(getPosition().x, actualHeight - getSize().height));
 		velocity.y = 0;
 	}
 
-	cout << checkIfCollisionBottom(object_list)<< endl;
 	move(Vector2f(velocity.x*delta, velocity.y*delta));
 	
 	
