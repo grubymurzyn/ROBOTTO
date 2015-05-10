@@ -5,18 +5,20 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include<iostream>
+static const float gravity = 1;
+static const int groundHeight = 680, maxHeight = 150;
+static float counter = 0;
+
 
 
 
 using namespace sf;
 using namespace std;
-class GameResources;
 class GameObject :public Drawable
 {
 private:
 	 Texture texture;
 	 Sprite sprite;
-	 GameResources *gameresources;
 
 public:
 	GameObject();

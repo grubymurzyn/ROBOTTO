@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Engine.h"
 
 Game::Game(void)
 {
@@ -10,7 +9,9 @@ Game::Game(void)
 		
 		return;
 	}
-	window.create(VideoMode(1024,512,32),"Robotto");
+	window.create(VideoMode(1280, 720), "Robotto", Style::Close);
+	View camera(Vector2f(640, 360), Vector2f(1280, 720));
+	window.setView(camera);
 	state = MENU;
 }
 

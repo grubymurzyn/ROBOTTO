@@ -22,10 +22,10 @@ template <class T> T Collision::colidingObject(vector<T> object_list){
 }
 
 
-bool Collision::checkIfCollision(vector<RectangleShape> object_list){
+bool Collision::checkIfCollision(vector<Sprite> object_list){
 	
 
-	for each (RectangleShape object in object_list)
+	for each (Sprite object in object_list)
 	{	
 
 
@@ -36,10 +36,10 @@ bool Collision::checkIfCollision(vector<RectangleShape> object_list){
 	return false;
 }
 
-bool Collision::checkIfCollisionTop(vector <RectangleShape> object_list){
+bool Collision::checkIfCollisionTop(vector <Sprite> object_list){
 
 	if (checkIfCollision(object_list)){
-		RectangleShape object = colidingObject(object_list);
+		Sprite object = colidingObject(object_list);
 		if (getPosition().y > object.getPosition().y) return true;
 		else return false;
 	}
@@ -48,10 +48,10 @@ bool Collision::checkIfCollisionTop(vector <RectangleShape> object_list){
 	}
 }
 
-bool Collision::checkIfCollisionBottom(vector <RectangleShape> object_list){
+bool Collision::checkIfCollisionBottom(vector <Sprite> object_list){
 
 	if (checkIfCollision(object_list)){
-		RectangleShape object = colidingObject(object_list);
+		Sprite object = colidingObject(object_list);
 		if (getPosition().y < object.getPosition().y) return true;
 		else return false;
 	}
@@ -60,9 +60,9 @@ bool Collision::checkIfCollisionBottom(vector <RectangleShape> object_list){
 	}
 }
 
-bool Collision::checkIfCollisionLeft(vector <RectangleShape> object_list){
+bool Collision::checkIfCollisionLeft(vector <Sprite> object_list){
 	if (checkIfCollision(object_list)){
-		RectangleShape object = colidingObject(object_list);
+		Sprite object = colidingObject(object_list);
 		if (getPosition().x < object.getPosition().x) return true;
 		else return false;
 	}
@@ -72,9 +72,9 @@ bool Collision::checkIfCollisionLeft(vector <RectangleShape> object_list){
 }
 
 
-bool Collision::checkIfCollisionRight(vector <RectangleShape> object_list){
+bool Collision::checkIfCollisionRight(vector <Sprite> object_list){
 	if (checkIfCollision(object_list)){
-		RectangleShape object = colidingObject(object_list);
+		Sprite object = colidingObject(object_list);
 		if (getPosition().x > object.getPosition().x) return true;
 		else return false;
 	}

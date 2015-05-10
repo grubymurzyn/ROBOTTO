@@ -1,12 +1,11 @@
-#include"GameResources.h"
 #include "Player.h"
 
 Player::Player(void)
 {
 	loadFile("data/images/robotto.png");
-	setAnimFrame(IntRect(0, 0, 96, 96));
+	setAnimFrame(IntRect(24, 0, 48, 96));
 	setPosition(Vector2f(1024/2,200));
-	setCenter(Vector2f(48, 48));
+	setCenter(Vector2f(24, 48));
 	status = WAIT;
 	isJumping = NO;
 
@@ -18,7 +17,7 @@ Player::~Player()
 {
 }
 
-void Player::update(float delta, vector<RectangleShape> object_list)//DO ZROBIENIA
+void Player::update(float delta, vector<Sprite> object_list)//DO ZROBIENIA
 {
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
 		velocity.x = moveSpeed;
@@ -126,26 +125,29 @@ void Player::update(float delta, vector<RectangleShape> object_list)//DO ZROBIEN
 
 
 		if (status == RIGHT && isJumping == NO){
-			setAnimFrame(IntRect(frame * 96, 0, 96, 96));
+			setAnimFrame(IntRect(frame * 96 + 24, 0, 48, 96));
 		}
 		else if (status == LEFT && isJumping == NO){
-			setAnimFrame(IntRect(frame * 96, 96, 96, 96));
+			setAnimFrame(IntRect(frame * 96 + 24, 96, 48, 96));
 		}
 		else if (status == WAIT && isJumping == NO){
-			setAnimFrame(IntRect(0, 192, 96, 96));
+			setAnimFrame(IntRect(24, 192, 48, 96));
 		}
 		else if (status == WAIT && isJumping == YES){
-			setAnimFrame(IntRect(frame* 96, 288, 96, 96));
+			setAnimFrame(IntRect(frame* 96 + 24, 288, 48, 96));
 		}
 		else if (status == RIGHT && isJumping == YES){
-			setAnimFrame(IntRect(frame * 96, 384, 96, 96));
+			setAnimFrame(IntRect(frame * 96 + 24, 384, 52, 96));
 		}
 		else if (status == LEFT && isJumping == YES){
-			setAnimFrame(IntRect(frame * 96, 480, 96, 96));
+			setAnimFrame(IntRect(frame * 96 + 20, 480, 52, 96));
 		}
-		//x, y, szerokosc, wysokosc
 		anim_clock.restart();
 	}
+}
+
+Vector2f Player::getVelocity(){
+	return velocity;
 }
 
 void Player::stop()

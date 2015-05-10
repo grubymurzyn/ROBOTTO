@@ -1,6 +1,5 @@
 #pragma once
-#include "Player.h"
-#include"GameResources.h"
+#include "MapManager.h"
 
 class Engine
 {

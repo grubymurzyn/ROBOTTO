@@ -7,11 +7,11 @@ public:
 	Collision();
 	~Collision();
 	template <typename T> T colidingObject(vector<T>);
-	virtual bool checkIfCollision(vector<RectangleShape>);
-	virtual bool checkIfCollisionBottom(vector<RectangleShape>);
-	virtual bool checkIfCollisionTop(vector<RectangleShape>);
-	virtual bool checkIfCollisionLeft(vector<RectangleShape>);
-	virtual bool checkIfCollisionRight(vector<RectangleShape>);
+	virtual bool checkIfCollision(vector<Sprite>);
+	virtual bool checkIfCollisionBottom(vector<Sprite>);
+	virtual bool checkIfCollisionTop(vector<Sprite>);
+	virtual bool checkIfCollisionLeft(vector<Sprite>);
+	virtual bool checkIfCollisionRight(vector<Sprite>);
 	
 };
 

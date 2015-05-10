@@ -1,7 +1,5 @@
 #pragma once
 #include"Collision.h"
-
-
 class Player : public Collision
 {
 public:
@@ -17,8 +15,9 @@ public:
 		YES,
 		NO
 	};
-	void update(float, vector<RectangleShape>);
+	void update(float, vector<Sprite>);
 	void stop();
+	Vector2f getVelocity();
 
 protected:
 	int animate_frame;
@@ -28,7 +27,7 @@ private:
 	Status status;
 	IsJumping isJumping;
 	//jumpSPEED == RANDOM
-	float actualHeight = 400;
+	float actualHeight = 680;
 	float jumpSpeed = 7.0f;
 	float moveSpeed = 100.0f;
 	float tempVelocityY =0;
