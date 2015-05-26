@@ -15,7 +15,7 @@ public:
 		YES,
 		NO
 	};
-	void update(float, vector<Sprite>);
+	void update(float, vector<Sprite*>,RenderWindow &);
 	void stop();
 	Vector2f getVelocity();
 
@@ -25,13 +25,16 @@ protected:
 private:
 	Vector2f velocity = Vector2f(0, 0);
 	Status status;
+	int score=0;
 	IsJumping isJumping;
 	//jumpSPEED == RANDOM
-	float actualHeight = 680;
-	float jumpSpeed = 7.0f;
-	float moveSpeed = 100.0f;
+	float actualHeight = groundHeight;
+	float lastHeight = 0;
+	float jumpSpeed = 400.0f;
+	float moveSpeed = 150.0f;
 	float tempVelocityY =0;
 	size_t frame=0;
+	void updateCollision(Sprite*);
 	Clock anim_clock;
 };
 

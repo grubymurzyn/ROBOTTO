@@ -8,7 +8,7 @@ Engine::Engine(sf::RenderWindow &win)
 Engine::~Engine(void)
 {
 }
-void Engine::runEngine(RenderWindow &window)
+int Engine::runEngine(RenderWindow &window)
 {
 	bool menu = false;
 	float t = 0;
@@ -19,15 +19,17 @@ void Engine::runEngine(RenderWindow &window)
 	{
 			float delta = clock.getElapsedTime().asSeconds() - t;
 			t = clock.getElapsedTime().asSeconds();
-
-			player.update(delta,map.getMapObjects());
-
 			map.moveCamera(player,delta);
 			window.setView(map.getCamera());
-			map.updateMap();
-			window.clear(Color(0,240,255));
+			map.updateMap(player); 
+			player.update(delta, map.getObstacles(),window);
+			window.clear(Color(181,181,181));
 			window.draw(player);
-			map.drawMap(window);
+			map.drawMap(window,&player);
 			window.display();
+			if (player.getGlobalBounds().top > 850 || player.getGlobalBounds().left > 11000){
+				menu = true;
+				return map.getScore();
+			}
 	}
 }

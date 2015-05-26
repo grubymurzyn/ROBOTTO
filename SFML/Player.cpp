@@ -4,7 +4,7 @@ Player::Player(void)
 {
 	loadFile("data/images/robotto.png");
 	setAnimFrame(IntRect(24, 0, 48, 96));
-	setPosition(Vector2f(1024/2,200));
+	setPosition(Vector2f(1280/4,600));
 	setCenter(Vector2f(24, 48));
 	status = WAIT;
 	isJumping = NO;
@@ -17,75 +17,48 @@ Player::~Player()
 {
 }
 
-void Player::update(float delta, vector<Sprite> object_list)//DO ZROBIENIA
+void Player::update(float delta, vector<Sprite*> object_list,RenderWindow &window)
 {
-	if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		velocity.x = moveSpeed;
-		status = RIGHT;
-		if (Keyboard::isKeyPressed(Keyboard::Space) && counter*delta < maxHeight*delta){
-			velocity.y -= jumpSpeed;
-			isJumping = YES;
-			++counter;
-		}
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		velocity.x = -moveSpeed;
-		status = LEFT;
-		if (Keyboard::isKeyPressed(Keyboard::Space) && counter*delta < maxHeight*delta){
-			velocity.y -= jumpSpeed;
-			isJumping = YES;
-			++counter;
-		}
-	}
-	else if ((Keyboard::isKeyPressed(Keyboard::Space)) && counter*delta < maxHeight*delta){
-		velocity.y -= jumpSpeed;
-		isJumping = YES;
-		++counter;
-	}
-	else{
-		velocity.x = 0;
-		status = WAIT;
-	}
-	
-	/*************************************
-	   SPRAWDZANIE KOLIZJI I JEJ OBS£UGA
-	*************************************/
-	if (checkIfCollisionTop(object_list)){
-		velocity.y = 0;
-		cout << "TOP" << endl;
-		if (checkIfCollisionLeft(object_list)){
-			cout << "TOP && LEFT" << endl;
-			if (velocity.x > 0) {
+	Event event;
+
+	while (window.pollEvent(event)){
+		if (event.type == Event::KeyReleased){
+			if (event.key.code == Keyboard::Space && isJumping == NO){
+				velocity.y -= jumpSpeed;
+				isJumping = YES;
+			}
+			if (event.key.code == Keyboard::Right || event.key.code == Keyboard::Left){
 				velocity.x = 0;
-			}
-			if (isJumping == YES){
-				tempVelocityY += gravity;
-				velocity.y = tempVelocityY;
-				cout << "TOP && LEFT && IS JUMPING " << endl;
+				status = WAIT;
 			}
 		}
-		else if (checkIfCollisionRight(object_list)){
-			cout << "TOP && RIGHT" << endl;
-			if (velocity.x < 0) {
-				velocity.x = 0;
+		else if (event.type == Event::KeyPressed){
+			if (event.key.code == Keyboard::Left){
+				velocity.x = -moveSpeed;
+				status = LEFT;
 			}
-			if (isJumping == YES){
-				tempVelocityY += gravity;
-				velocity.y = tempVelocityY;
-				cout << "TOP && LEFT && IS JUMPING " << endl;
+			if (event.key.code == Keyboard::Right){
+				velocity.x = moveSpeed;
+				status = RIGHT;
 			}
+		}
+		if (event.type == Event::Closed){
+			window.close();
 		}
 	}
 	
-	if (checkIfCollisionBottom(object_list)){
-		counter = 0;
-		actualHeight = getPosition().y + getSize().height;
-		cout << "BOTTOM" << endl;
+	/*UPDATE KOLIZJI*/
+	if (checkIfCollision(object_list)){
+		Sprite *object = getColidingObject();
+		updateCollision(object);
 	}
-	else if (!checkIfCollisionBottom(object_list) && actualHeight != groundHeight){
-		actualHeight = groundHeight;
+	else {
+		Sprite *object = NULL;
+		updateCollision(object);
 	}
 
+
+	
 	if ((getPosition().y + getSize().height < actualHeight || velocity.y < 0)){
 		isJumping = YES;
 		if (velocity.y == 0) isFalling = true;
@@ -157,4 +130,66 @@ void Player::stop()
 }
 
 
+void Player::updateCollision(Sprite *object) {
+	/*************************************
+	SPRAWDZANIE KOLIZJI I JEJ OBS£UGA
+	*************************************/
+	if (checkIfCollisionTop(object)){
+		velocity.y = 0;
+		if (checkIfCollisionLeft(object)){
+			if (velocity.x > 0) {
+				velocity.x = 0;
+			}
+			if ((getPosition().y + getSize().height < lastHeight)){
+				tempVelocityY += gravity;
+				velocity.y = tempVelocityY;
+			}
+			else {
+				isFalling = false;
+				tempVelocityY = 0;
+				isJumping = NO;
+				counter = 0;
+				setPosition(Vector2f(getPosition().x, lastHeight - getSize().height));
+				actualHeight = lastHeight;
+				velocity.y = 0;
+
+			}
+		}//PRZEROBIC
+		else if (checkIfCollisionRight(object)){
+			if (velocity.x < 0) {
+				velocity.x = 0;
+			}
+			if ((getPosition().y + getSize().height < lastHeight)){
+					tempVelocityY += gravity;
+					velocity.y = tempVelocityY;
+			}
+			else {
+				isFalling = false;
+				tempVelocityY = 0;
+				isJumping = NO;
+				counter = 0;
+				setPosition(Vector2f(getPosition().x, lastHeight - getSize().height));
+				velocity.y = 0;
+			}
+		}
+	}
+	if (checkIfCollisionBottom(object)){
+		counter = 0;
+		actualHeight = getPosition().y + getSize().height;
+		lastHeight = actualHeight;
+	}
+	else if (checkIfCollisionLeft(object)){
+		if (velocity.x > 0){
+			velocity.x = 0;
+		}
+	}
+	else if (checkIfCollisionRight(object)){
+		if (velocity.x < 0){
+			velocity.x = 0;
+		}
+	}
+	else {
+		actualHeight = groundHeight;
+	}
+}
 

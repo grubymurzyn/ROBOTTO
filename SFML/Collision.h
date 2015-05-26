@@ -2,16 +2,16 @@
 #include "GameObject.h"
 class Collision :public GameObject
 {
-
+	Sprite *colidingObject;
 public:
 	Collision();
 	~Collision();
-	template <typename T> T colidingObject(vector<T>);
-	virtual bool checkIfCollision(vector<Sprite>);
-	virtual bool checkIfCollisionBottom(vector<Sprite>);
-	virtual bool checkIfCollisionTop(vector<Sprite>);
-	virtual bool checkIfCollisionLeft(vector<Sprite>);
-	virtual bool checkIfCollisionRight(vector<Sprite>);
+	virtual bool checkIfCollision(vector<Sprite*>);
+	virtual bool checkIfCollisionBottom(Sprite*);
+	virtual bool checkIfCollisionTop(Sprite*);
+	virtual bool checkIfCollisionLeft(Sprite*);
+	virtual bool checkIfCollisionRight(Sprite*);
+	Sprite *getColidingObject(){ return colidingObject; };
 	
 };
 

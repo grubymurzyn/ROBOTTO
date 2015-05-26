@@ -8,8 +8,9 @@ MapManager::MapManager(int lvl)
 	plik.open("data/level1.txt");
 
 
-	for (int i = 0; i < 23; i++)
+	for (int i = 0; i < 23; i++){
 		tiles[i].loadFromFile("data/level1.png", sf::IntRect(0, i * 64, 64, 64));
+	}
 
 	for (int i = 0; i < HEIGHT; i++){
 		for (int j = 0; j < WIDTH; j++){
@@ -30,36 +31,53 @@ MapManager::~MapManager()
 {
 }
 
-void MapManager::updateMap()
+void MapManager::updateMap(Player player)
 {
 	int leftSide;									//pierwszy i ostatni kafel, ktory bedziemy wyswietlac (numer)
 	int rightSide;
 
-	leftSide = camera.getCenter().x / 64 - 11;  					//(11)15 - polowa liczby kafli, 64 - szerokosc kafla
+	leftSide = camera.getCenter().x / 64 - 10;  					//(11)15 - polowa liczby kafli, 64 - szerokosc kafla
 	if (leftSide < 0)
 		leftSide = 0;
 
-	rightSide = camera.getCenter().x / 64 + 11;
+	rightSide = camera.getCenter().x / 64 + 10;
 	if (rightSide > WIDTH)
 		rightSide = WIDTH;
 
 	for (int i = 0; i < HEIGHT; i++){
-		for (int j = leftSide, x = 0; j < rightSide; j++, x++) 	//x - numer kafla sprite'a, j - numer kafla mapy
+		for (int j = leftSide, x = 0; j < rightSide, x < windowWIDTH; j++, x++) 	//x - numer kafla sprite'a, j - numer kafla mapy
 		{
-			vlevel[i][x].setPosition(j * 64, i * 64);
-			cout << vlevel[i][x].getPosition().y << endl;
-			vlevel[i][x].setTexture(tiles[LEVEL[i][j]]);
+			if (LEVEL[i][j] != 0 && LEVEL[i][j] != 19){
+				vlevel[i][x].setTexture(tiles[LEVEL[i][j]]);
+				vlevel[i][x].setPosition(j * 64, i * 64);
+				obstacles.push_back(&vlevel[i][x]);
+			}
+			else if (LEVEL[i][j] != 0 && LEVEL[i][j] == 19 && !(player.getGlobalBounds().intersects(vlevel[i][x].getGlobalBounds()))){
+				vlevel[i][x].setTexture(tiles[LEVEL[i][j]]);
+				vlevel[i][x].setPosition(j * 64, i * 64);
+			}
+			else if (LEVEL[i][j] == 19 && (player.getGlobalBounds().intersects(vlevel[i][x].getGlobalBounds()))){
+				++score;
+				cout << score << endl;
+				LEVEL[i][j] = 0;
+			}
 		}
 	}
 } 
 
-void MapManager::drawMap(RenderWindow &window)
+void MapManager::drawMap(RenderWindow &window, Player *player)
 {
-	for (int i = 0; i<12; i++){
-		for (int j = 0; j < 30; j++)
-			window.draw(vlevel[i][j]);
-
+	Texture *texture(&tiles[19]);
+	for (int i = 0; i<HEIGHT; i++){
+		for (int j = 0; j < windowWIDTH; j++)
+			if (vlevel[i][j].getTexture() == texture && (player->getGlobalBounds().intersects(vlevel[i][j].getGlobalBounds()))){
+				vlevel[i][j].setTexture(tiles[0]);
+			}
+			else{
+				window.draw(vlevel[i][j]);
+			}
 	}
+	obstacles.clear();
 }
 
 View MapManager::getCamera(){
@@ -79,6 +97,10 @@ void MapManager::moveCamera(Player player ,float delta)
 	}
 }
 
-vector <Sprite> MapManager::getMapObjects(){
-	return gameObjects;
+vector <Sprite*> MapManager::getObstacles(){
+	return obstacles;
+}
+
+int MapManager::getScore() {
+	return score;
 }

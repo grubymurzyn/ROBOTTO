@@ -1,4 +1,4 @@
-#include "Collision.h"
+#include "Collision.h" 
 
 
 Collision::Collision()
@@ -10,37 +10,26 @@ Collision::~Collision()
 {
 }
 
-template <class T> T Collision::colidingObject(vector<T> object_list){
-	for each (T object in object_list)
-	{
 
-
-		if (getGlobalBounds().intersects(object.getGlobalBounds()))return object;
-
-
+bool Collision::checkIfCollision(vector<Sprite*> object_list){
+	bool ifExists = false;
+	for each(Sprite *adress in object_list){
+		if (getGlobalBounds().intersects(adress->getGlobalBounds())){
+			colidingObject = adress;
+			ifExists = true;
+			break;
+		}
+		else {
+			ifExists = false;
+		}
 	}
+	return ifExists;
+
 }
+bool Collision::checkIfCollisionTop(Sprite *object){
 
-
-bool Collision::checkIfCollision(vector<Sprite> object_list){
-	
-
-	for each (Sprite object in object_list)
-	{	
-
-
-		if (getGlobalBounds().intersects(object.getGlobalBounds()))return true;
-
-			
-	}
-	return false;
-}
-
-bool Collision::checkIfCollisionTop(vector <Sprite> object_list){
-
-	if (checkIfCollision(object_list)){
-		Sprite object = colidingObject(object_list);
-		if (getPosition().y > object.getPosition().y) return true;
+	if (object){
+		if (getGlobalBounds().top > object->getGlobalBounds().top +gameTileCenterFix ) return true;
 		else return false;
 	}
 	else{
@@ -48,22 +37,24 @@ bool Collision::checkIfCollisionTop(vector <Sprite> object_list){
 	}
 }
 
-bool Collision::checkIfCollisionBottom(vector <Sprite> object_list){
+bool Collision::checkIfCollisionBottom(Sprite * object){
 
-	if (checkIfCollision(object_list)){
-		Sprite object = colidingObject(object_list);
-		if (getPosition().y < object.getPosition().y) return true;
-		else return false;
+	if (object){
+		if (getGlobalBounds().top +getGlobalBounds().height  <= object->getGlobalBounds().top+gameTileCenterFix){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	else{
 		return false;
 	}
 }
 
-bool Collision::checkIfCollisionLeft(vector <Sprite> object_list){
-	if (checkIfCollision(object_list)){
-		Sprite object = colidingObject(object_list);
-		if (getPosition().x < object.getPosition().x) return true;
+bool Collision::checkIfCollisionLeft(Sprite * object){
+	if (object){
+		if (getGlobalBounds().left +getGlobalBounds().width <= object->getGlobalBounds().left +gameTileCenterFix) return true;
 		else return false;
 	}
 	else{
@@ -72,14 +63,14 @@ bool Collision::checkIfCollisionLeft(vector <Sprite> object_list){
 }
 
 
-bool Collision::checkIfCollisionRight(vector <Sprite> object_list){
-	if (checkIfCollision(object_list)){
-		Sprite object = colidingObject(object_list);
-		if (getPosition().x > object.getPosition().x) return true;
+bool Collision::checkIfCollisionRight(Sprite *object){
+	if (object){
+		if (getGlobalBounds().left > object->getGlobalBounds().left + gameTileCenterFix) return true;
 		else return false;
 	}
 	else{
 		return false;
 	}
 }
+
 

@@ -20,6 +20,11 @@ bool GameObject::loadFile(String path){
 	}
 
 }
+void GameObject::loadFromTexture(Texture texture){
+
+		sprite.setTexture(texture);
+
+}
 
 void GameObject::setAnimFrame(IntRect &rect){
 	sprite.setTextureRect(rect);

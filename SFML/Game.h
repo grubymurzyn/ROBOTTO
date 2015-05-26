@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine.h"
+#include"HighScores.h"
+#include <sstream>
 #include<Windows.h>
 #include<string>
 
@@ -13,14 +15,16 @@ public:
 
 	void runGame();
 	void single();
-
-protected:
-	enum GameState { MENU, GAME, GAME_OVER, END };
+	void endScreen();
+	void highScores();
+	string chooseName();
+	enum GameState { MENU, GAME, GAME_OVER, END, HIGHSCORES };
 	GameState state;
 
 private:
 	Font font;
 	RenderWindow window;
 	void menu();
+	int score = 0;
 };
 

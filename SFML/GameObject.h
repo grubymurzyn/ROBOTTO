@@ -5,9 +5,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include<iostream>
-static const float gravity = 1;
-static const int groundHeight = 680, maxHeight = 150;
+static const float gravity = 30;
+static const int groundHeight = 1000;
 static float counter = 0;
+static const int gameTileCenterFix = 32;
 
 
 
@@ -24,6 +25,7 @@ public:
 	GameObject();
 	~GameObject();
 	virtual bool loadFile(String);
+	virtual void loadFromTexture(Texture);
 	virtual void setAnimFrame(IntRect&);
 	virtual void setPosition(Vector2f);
 	virtual Vector2f getPosition();
