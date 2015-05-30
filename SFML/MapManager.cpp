@@ -58,7 +58,6 @@ void MapManager::updateMap(Player player)
 			}
 			else if (LEVEL[i][j] == 19 && (player.getGlobalBounds().intersects(vlevel[i][x].getGlobalBounds()))){
 				++score;
-				cout << score << endl;
 				LEVEL[i][j] = 0;
 			}
 		}

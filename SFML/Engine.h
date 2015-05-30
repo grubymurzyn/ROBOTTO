@@ -6,7 +6,7 @@ class Engine
 public:
 	Engine(sf::RenderWindow &win);
 	~Engine(void);
-	int runEngine(sf::RenderWindow &window);
+	int runEngine(sf::RenderWindow &window,Font);
 
 private:
 	Player player;

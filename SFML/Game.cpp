@@ -9,9 +9,10 @@ Game::Game(void)
 		return;
 	}
 	window.create(VideoMode(1280, 720), "Robotto", Style::Close);
+	window.setPosition(Vector2i(0, 0));
 	View camera(Vector2f(640, 360), Vector2f(1280, 720));
 	window.setView(camera);
-	state = GAME_OVER;
+	state = MENU;
 }
 
 
@@ -108,7 +109,10 @@ void Game::menu()
 void Game::single()
 {
 	Engine engine(window);
-	score = engine.runEngine(window);
+	MusicPlayer music;
+	music.play();
+	music.setLoop(true);
+	score = engine.runEngine(window,font);
 	state = GAME_OVER;
 }
 
@@ -162,12 +166,10 @@ void Game::endScreen()
 				if (event.text.unicode < 128 && event.text.unicode != 8)
 				{	
 					name.push_back(event.text.unicode);
-					cout << name << endl;
 					displayedName.setString(name);
 				}
 				else if (event.text.unicode==8 && name.length() >0) {
 					name.pop_back();
-					cout << name << endl;
 					displayedName.setString(name);
 				}
 			}else if (event.type == Event::Closed || event.type == Event::KeyPressed &&
@@ -175,7 +177,7 @@ void Game::endScreen()
 				state = END;
 
 			else if (button.getGlobalBounds().contains(mouse) &&
-				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
+				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && name.length() != 0)
 			{
 				Score fullScore;
 				fullScore.Add(name, score);
@@ -208,13 +210,33 @@ void Game::highScores(){
 	window.setView(camera);
 	Event event;
 
+	HighScores highscores;
 	Text title("HIGHSCORES", font, 80);
 	Text button("PRZEJDZ DO MENU", font, 62);
-	HighScores highscores;
-	//TUTAJ DOKONCZYC
+	Text names[5];
+	Text points[5];
+	for (int i = 0; i < 5; ++i){
+		names[i].setString(highscores.tab[i].name);
+		names[i].setFont(font);
+		names[i].setCharacterSize(28);
+		names[i].setColor(Color::Black);
+		names[i].setPosition(1280 / 2 - names[i].getGlobalBounds().width / 2, 170 + i * 75);
+		ostringstream ss;
+		ss << highscores.tab[i].score;
+		string wynik = ss.str();
+		points[i].setString(wynik);
+		points[i].setFont(font);
+		points[i].setCharacterSize(24);
+		points[i].setColor(Color::Red);
+		points[i].setPosition(1280 / 2 - points[i].getGlobalBounds().width / 2, 200 + i * 75);
+
+	}
+
+
+
 	title.setColor(Color::Black);
 	button.setColor(Color::Black);
-	button.setPosition(1280 / 2 - button.getGlobalBounds().width / 2, 500);
+	button.setPosition(1280 / 2 - button.getGlobalBounds().width / 2, 550);
 	title.setPosition(1280 / 2 - title.getGlobalBounds().width / 2, 70);
 
 	while (window.pollEvent(event))
@@ -238,6 +260,10 @@ void Game::highScores(){
 	window.clear(Color(181, 181, 181));
 	window.draw(button);
 	window.draw(title);
+	for (int i = 0; i < 5; i++){
+		window.draw(names[i]);
+		window.draw(points[i]);
+	}
 
 	window.display();
 }

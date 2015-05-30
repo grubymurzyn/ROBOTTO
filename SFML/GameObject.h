@@ -5,6 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include<iostream>
+#include <sstream>
 static const float gravity = 30;
 static const int groundHeight = 1000;
 static float counter = 0;
