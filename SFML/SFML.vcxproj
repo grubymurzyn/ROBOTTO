@@ -20,6 +20,7 @@
     <ClCompile Include="HighScores.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="Monsters.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Gears.h" />
     <ClInclude Include="HighScores.h" />
     <ClInclude Include="MapManager.h" />
+    <ClInclude Include="Monsters.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />

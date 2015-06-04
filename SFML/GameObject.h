@@ -36,6 +36,7 @@ public:
 	virtual void draw(RenderTarget&,RenderStates) const;
 	virtual void move(Vector2f);
 	virtual FloatRect getGlobalBounds();
+	virtual Sprite getSprite();
 
 };
 

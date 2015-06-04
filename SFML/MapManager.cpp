@@ -1,12 +1,13 @@
 #include "MapManager.h"
-View camera(Vector2f(640, 360), Vector2f(1280, 720));
 
+View camera(Vector2f(640, 360), Vector2f(1280, 720));
 MapManager::MapManager(int lvl)
 {
 	char znak;
 	std::ifstream plik;
 	plik.open("data/level1.txt");
-
+	// FIX NA ZRESTARTOWANIE GRY
+	camera.setCenter(Vector2f(640, 360));
 
 	for (int i = 0; i < 23; i++){
 		tiles[i].loadFromFile("data/level1.png", sf::IntRect(0, i * 64, 64, 64));
@@ -29,6 +30,7 @@ MapManager::MapManager(int lvl)
 
 MapManager::~MapManager()
 {
+
 }
 
 void MapManager::updateMap(Player player)
@@ -58,6 +60,7 @@ void MapManager::updateMap(Player player)
 			}
 			else if (LEVEL[i][j] == 19 && (player.getGlobalBounds().intersects(vlevel[i][x].getGlobalBounds()))){
 				++score;
+
 				LEVEL[i][j] = 0;
 			}
 		}

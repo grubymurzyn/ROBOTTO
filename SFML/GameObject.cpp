@@ -60,3 +60,7 @@ void GameObject::move(Vector2f destination){
 FloatRect GameObject::getGlobalBounds() {
 	return sprite.getGlobalBounds();
 }
+
+Sprite GameObject::getSprite(){
+	return sprite;
+}

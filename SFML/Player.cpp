@@ -154,7 +154,7 @@ void Player::updateCollision(Sprite *object) {
 				velocity.y = 0;
 
 			}
-		}//PRZEROBIC
+		}
 		else if (checkIfCollisionRight(object)){
 			if (velocity.x < 0) {
 				velocity.x = 0;

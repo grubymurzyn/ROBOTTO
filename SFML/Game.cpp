@@ -10,8 +10,6 @@ Game::Game(void)
 	}
 	window.create(VideoMode(1280, 720), "Robotto", Style::Close);
 	window.setPosition(Vector2i(0, 0));
-	View camera(Vector2f(640, 360), Vector2f(1280, 720));
-	window.setView(camera);
 	state = MENU;
 }
 
@@ -42,6 +40,9 @@ void Game::runGame()
 }
 void Game::menu()
 {	
+	View camera(Vector2f(640, 360), Vector2f(1280, 720));
+	window.setView(camera);
+
 	Text title("Robotto", font, 80);
 	title.setStyle(Text::Italic);
 	title.setColor(Color::Black);
@@ -108,11 +109,16 @@ void Game::menu()
 }
 void Game::single()
 {
-	Engine engine(window);
+	View camera(Vector2f(640, 360), Vector2f(1280, 720));
+	window.setView(camera);
+
+
+	Engine *engine =  new Engine(window);
 	MusicPlayer music;
 	music.play();
 	music.setLoop(true);
-	score = engine.runEngine(window,font);
+	score = engine->runEngine(window,font);
+	delete(engine);
 	state = GAME_OVER;
 }
 

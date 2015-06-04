@@ -1,12 +1,12 @@
+pyjter
+85
 ZIK
 74
+ANDRZEJEK
+68
 SUPER
 65
-ANDRZEJ
-42
-MIETEK
-42
-Kobra
-10
-
+g
+54
+2
 

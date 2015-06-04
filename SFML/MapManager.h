@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Obstacle.h"
+#include "Monsters.h"
 #include "Gears.h"
 #include <fstream>
 #pragma once
@@ -21,6 +22,7 @@ public:
 	~MapManager();
 	void updateMap(Player);
 	View getCamera();
+
 	void drawMap(RenderWindow &,Player *);
 	void moveCamera(Player,float);
 	int getScore();
