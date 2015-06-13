@@ -21,8 +21,8 @@ int Engine::runEngine(RenderWindow &window,Font font)
 	score.setColor(Color::Red);
 	while (!menu)
 	{		
-		cout <<"X: "<<player->getPosition().x << endl;
-		cout <<"Y: "<<player->getPosition().y << endl;
+		//cout <<"X: "<<player->getPosition().x << endl;
+		//cout <<"Y: "<<player->getPosition().y << endl;
 			//KROK CZASOWY
 			float delta = clock.getElapsedTime().asSeconds() - t;
 			t = clock.getElapsedTime().asSeconds();
@@ -56,7 +56,6 @@ int Engine::runEngine(RenderWindow &window,Font font)
 			if (player->getGlobalBounds().top > 850 || player->getGlobalBounds().left > 11000 || monsters->killPlayer(player->getSprite())){
 				menu = true;
 				delete(player);
-				cout << "-----------------------------" << endl;
 				delete(monsters);
 				int a = map->getScore();
 				delete(map);
